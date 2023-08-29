@@ -1,0 +1,17 @@
+  <.simple_form
+    :let={f}
+    for={@changeset}
+    action={~p"/items"}
+    container_class="mt-0 space-y-0 w-full"
+  >
+    <.input
+      field={f[:text]}
+      placeholder="What needs to be done?"
+      class="flex-1 border-4 w-full min-w-0 p-2"
+      input_field_class="border-0 placeholder:italic placeholder:text-slate-400 placeholder:text-xl text-xl sm:text-xl"
+      container_class="flex-auto pr-4 pt-1"
+    />
+    <:actions>
+      <.button style="display:none">Save Item</.button>
+    </:actions>
+  </.simple_form>

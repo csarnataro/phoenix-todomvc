@@ -1,0 +1,22 @@
+<.simple_form
+  :let={f}
+  for={@changeset}
+  method="put"
+  action={~p"/items/#{@item}"}
+  class="w-full border-1 border-slate-400"
+  container_class="mt-0 space-y-0 pr-4"
+>
+    <.input
+      field={f[:text]}
+      type="text"
+      placeholder="what needs to be done?"
+      class="new-todo border-0 flex-1 min-w-0 p-2"
+      input_field_class="text-2xl border-0 sm:!text-2xl !mt-1 pl-2 "
+    />
+  <!-- submit the form using the Return/Enter key -->
+  <:actions>
+    <.button style="display: none;" type="submit">
+      Save
+    </.button>
+  </:actions>  
+</.simple_form>

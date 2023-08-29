@@ -1,0 +1,134 @@
+<div class="min-h-screen font-sans">
+  <div class="container mx-auto flex flex-col items-center">
+    <h1 class="text-opacity-20 text-red-900 text-8xl text-center">todos</h1>
+    <main class="mt-8 shadow-xl w-full max-w-prose bg-white">
+      <div class="flex border block flex-row text-2xl h-16">
+        <.link
+          href={~p"/items/toggle"}
+          class={"p-4 flex-0 w-12 text-gray-400 #{if @total_items == 0, do: "invisible"}"}
+        >
+          <%= if @filter_info[:highlight_toggle] do %>
+            <.icon name="hero-check-badge" class="h-5 w-5" />
+          <% else %>
+            <.icon
+              name="hero-check-badge-solid"
+              class={"h-5 w-5 #{if @total_items == 0, do: "invisible"}"}
+            />
+          <% end %>
+        </.link>
+
+        <%= if (@editing.id) do %>
+          <.link href={~p"/items"} method="get" class="new-todo h-16 block text-2xl pl-2 pt-4">
+            Click here to create a new item!
+          </.link>
+        <% else %>
+          <%= new(Map.put(assigns, :action, ~p"/items/new")) %>
+        <% end %>
+      </div>
+
+      <div style="display: contents;">
+        <%= for item <- @items do %>
+          <div class="border-t-2 border-gray-100 text-2xl">
+            <div class={
+              ~s'flex flex-row group #{if @editing.id && @editing.id == item.id, do: "border-green-400 border"}'
+            }>
+              <%= if completed(item) do %>
+                <.link href={~p"/items/toggle/#{item.id}"} class="w-12 p-4 text-green-400">
+                  <.icon name="hero-check-circle" class="h-5 w-5 block border border-slate-400" />
+                </.link>
+              <% else %>
+                <.link href={~p"/items/toggle/#{item.id}"} class="w-12 p-[1.1rem]">
+                  <div class="h-[1rem] w-[1rem] border border-slate-400 rounded-full" />
+                </.link>
+              <% end %>
+              <%= if @editing.id && @editing.id == item.id do %>
+                <%= edit(
+                  Map.put(assigns, :action, ~p"/items/#{item.id}/edit")
+                  |> Map.put(:item, item)
+                ) %>
+              <% else %>
+                <label class="flex-1 min-w-0 flex items-center break-all p-2 text-gray-800">
+                  <%= item.text %>
+                </label>
+                <.link
+                  class="w-12 opacity-0 group-hover:opacity-100 p-2"
+                  href={~p"/items/#{item}/edit"}
+                >
+                  <.icon name="hero-pencil-square" class="h-5 w-54" />
+                </.link>
+                <.link
+                  class="destroy w-12 text-red-700 opacity-0 group-hover:opacity-100 p-2"
+                  href={~p"/items/#{item}"}
+                  method="delete"
+                >
+                  <.icon name="hero-trash" class="h-5 w-54" />
+                </.link>
+              <% end %>
+            </div>
+            <div style="display: contents;"></div>
+          </div>
+        <% end %>
+      </div>
+      <%= if @total_items > 0 do %>
+        <div class="text-slate-400 text-xs flex flex-row items-center flex-wrap sm:flex-nowrap p-2 font-light border-t-2 border-gray-100">
+          <div class="flex-1 flex flex-row order-1 justify-start">
+            <%= remaining_items(@items) %> items left
+          </div>
+          <div class={
+            ~s'flex-1 flex flex-row order-2 sm:order-3 justify-end #{unless @filter_info[:show_clear_completed], do: "invisible"}'
+          }>
+            <.link href={~p"/items/clear"} class="block">Clear Completed</.link>
+          </div>
+          <div class="flex-auto flex flex-row order-3 sm:order-2 w-1/2 justify-center">
+            <.link
+              class={
+                ~s'rounded border px-1 mx-2 border-red-100 #{if is_nil(@filter_info[:filter]), do: "!border-red-600"}'
+              }
+              href={~p"/items"}
+            >
+              All
+            </.link>
+            <.link
+              class={
+                ~s'rounded border px-1 mx-2 border-red-100 #{if @filter_info[:filter] == "active", do: "!border-red-600"}'
+              }
+              href={~p"/items/filter/active"}
+            >
+              Active [<%= @filter_info[:active_count] %>]
+            </.link>
+            <.link
+              class={
+                ~s'rounded border px-1 mx-2 border-red-100 #{if @filter_info[:filter] == "completed", do: "!border-red-600"}'
+              }
+              href={~p"/items/filter/completed"}
+            >
+              Completed [<%= @filter_info[:completed_count] %>]
+            </.link>
+          </div>
+        </div>
+      <% end %>
+    </main>
+    <footer class="mt-16 p-4 flex flex-col">
+      <span class="m-0.5 text-xs text-center text-gray-500">
+        Written by
+        <a class="hover:underline" href="https://csarnataro.github.io">Christian Sarnataro</a>
+      </span>
+      <span class="m-0.5 text-xs text-center text-gray-500">
+        with
+        <a class="hover:underline" href="https://phoenixframework.org/">
+          Phoenix Framework 1.7.1
+        </a>
+        and <a class="hover:underline" href="https://tailwindcss.com/">Tailwind CSS</a>.
+      </span>
+      <span class="m-0.5 text-xs text-center text-gray-500">
+        Mostly compliant to the <a class="hover:underline" href="https://todomvc.com/">TodoMVC</a>
+        <a
+          class="hover:underline"
+          href="https://github.com/tastejs/todomvc/blob/master/app-spec.md"
+        >
+          specification
+        </a>
+      </span>
+    </footer>
+  </div>
+</div>
