@@ -46,7 +46,7 @@ defmodule AppWeb.ItemController do
       {:ok, _item} ->
         conn
         # |> put_flash(:info, "Item created successfully.")
-        |> redirect(to: ~p"/items")
+        |> redirect(to: ~p"/")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :new, changeset: changeset)
@@ -72,7 +72,7 @@ defmodule AppWeb.ItemController do
       {:ok, _item} ->
         conn
         # |> put_flash(:info, "Item updated successfully.")
-        |> redirect(to: ~p"/items")
+        |> redirect(to: ~p"/")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :edit, item: item, changeset: changeset)
@@ -85,7 +85,7 @@ defmodule AppWeb.ItemController do
 
     conn
     # |> put_(:inflashfo, "Item deleted successfully.")
-    |> redirect(to: ~p"/items")
+    |> redirect(to: ~p"/")
   end
 
   def toggle(conn, %{"id" => id}) do
@@ -94,7 +94,7 @@ defmodule AppWeb.ItemController do
 
     conn
     # |> put_flash(:info, "Item status updated")
-    |> redirect(to: ~p"/items")
+    |> redirect(to: ~p"/")
   end
 
 
@@ -111,7 +111,7 @@ defmodule AppWeb.ItemController do
 
     conn
     # |> put_flash(:info, "Item status updated")
-    |> redirect(to: ~p"/items")
+    |> redirect(to: ~p"/")
   end
 
 
@@ -163,7 +163,7 @@ defmodule AppWeb.ItemController do
 
     conn
     # |> put_flash(:info, "Item status updated")
-    |> redirect(to: ~p"/items")
+    |> redirect(to: ~p"/")
 
   end
 end

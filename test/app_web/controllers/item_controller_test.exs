@@ -12,28 +12,28 @@ defmodule AppWeb.ItemControllerTest do
 
   describe "index" do
     test "lists all items", %{conn: conn} do
-      conn = get(conn, ~p"/items")
+      conn = get(conn, ~p"/")
       assert html_response(conn, 200) =~ "What needs to be done?"
     end
   end
 
   describe "new item" do
     test "renders form", %{conn: conn} do
-      conn = get(conn, ~p"/items/new")
+      conn = get(conn, ~p"/new")
       assert html_response(conn, 200) =~ "What needs to be done?"
     end
   end
 
   describe "create item" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, ~p"/items", item: @create_attrs)
+      conn = post(conn, ~p"/", item: @create_attrs)
 
       assert %{} = redirected_params(conn)
-      assert redirected_to(conn) == ~p"/items"
+      assert redirected_to(conn) == ~p"/"
     end
 
     test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/items", item: @invalid_attrs)
+      conn = post(conn, ~p"/", item: @invalid_attrs)
       assert html_response(conn, 200) =~ "What needs to be done?"
     end
   end
@@ -42,7 +42,7 @@ defmodule AppWeb.ItemControllerTest do
     setup [:create_item]
 
     test "renders form for editing chosen item", %{conn: conn, item: item} do
-      conn = get(conn, ~p"/items/#{item}/edit")
+      conn = get(conn, ~p"/#{item}/edit")
       assert html_response(conn, 200) =~ "Click here to create a new item"
     end
   end
@@ -51,15 +51,15 @@ defmodule AppWeb.ItemControllerTest do
     setup [:create_item]
 
     test "redirects when data is valid", %{conn: conn, item: item} do
-      conn = put(conn, ~p"/items/#{item}", item: @update_attrs)
-      assert redirected_to(conn) == ~p"/items"
+      conn = put(conn, ~p"/#{item}", item: @update_attrs)
+      assert redirected_to(conn) == ~p"/"
 
-      conn = get(conn, ~p"/items/#{item}")
+      conn = get(conn, ~p"/#{item}")
       assert html_response(conn, 200) =~ "some updated text"
     end
 
     test "renders errors when data is invalid", %{conn: conn, item: item} do
-      conn = put(conn, ~p"/items/#{item}", item: @invalid_attrs)
+      conn = put(conn, ~p"/#{item}", item: @invalid_attrs)
       assert html_response(conn, 200) =~ "can&#39;t be blank"
     end
   end
@@ -68,10 +68,10 @@ defmodule AppWeb.ItemControllerTest do
     setup [:create_item]
 
     test "deletes chosen item", %{conn: conn, item: item} do
-      conn = delete(conn, ~p"/items/#{item}")
-      assert redirected_to(conn) == ~p"/items"
+      conn = delete(conn, ~p"/#{item}")
+      assert redirected_to(conn) == ~p"/"
 
-      all_items_resp = get(conn, ~p"/items")
+      all_items_resp = get(conn, ~p"/")
       IO.inspect(all_items_resp)
       assert html_response(all_items_resp, 200) =~ @create_attrs.text
 
@@ -110,20 +110,20 @@ defmodule AppWeb.ItemControllerTest do
 
     test "updates the status of an item and redirects to items/ page", %{conn: conn, item: i} do
       assert i.status == 0
-      get(conn, ~p"/items/toggle/#{i.id}")
+      get(conn, ~p"/toggle/#{i.id}")
       toggled_item = Todo.get_item!(i.id)
       assert toggled_item.status == 1
     end
   end
 
   test "filter items", %{conn: conn} do
-    post(conn, ~p"/items", item: @create_attrs)
+    post(conn, ~p"/", item: @create_attrs)
 
     # after creating the item, check that it's in the list of active items
-    active_resp = get(conn, ~p"/items/filter/active")
+    active_resp = get(conn, ~p"/filter/active")
     assert html_response(active_resp, 200) =~ @create_attrs.text
 
-    completed_resp = get(conn, ~p"/items/filter/completed")
+    completed_resp = get(conn, ~p"/filter/completed")
     assert !html_response(completed_resp, 200) =~ @create_attrs.text
 
   end

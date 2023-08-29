@@ -17,12 +17,12 @@ defmodule AppWeb.Router do
   scope "/", AppWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
-    get "/items/toggle", ItemController, :toggle_all
-    get "/items/clear", ItemController, :clear_completed
-    get "/items/toggle/:id", ItemController, :toggle
-    get "/items/filter/:filter", ItemController, :filter
-    resources "/items", ItemController, except: [:show]
+    get "/version", PageController, :home
+    get "/toggle", ItemController, :toggle_all
+    get "/clear", ItemController, :clear_completed
+    get "/toggle/:id", ItemController, :toggle
+    get "/filter/:filter", ItemController, :filter
+    resources "/", ItemController, except: [:show]
 
   end
 
